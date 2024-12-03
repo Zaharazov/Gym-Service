@@ -26,4 +26,11 @@ var pages_routes = Routes{
 		"/gyms/{gym_id}",
 		services.GetGymPageById,
 	},
+
+	Route{
+		"GetGymsPassesPage",
+		strings.ToUpper("Get"),
+		"/gyms_passes",
+		services.GetGymsPassesPage,
+	},
 }

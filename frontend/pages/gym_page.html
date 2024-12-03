@@ -71,7 +71,7 @@
             margin-right: auto;
         }
 
-        h1 {
+        h1, h2 {
             margin-bottom: 20px;
             text-align: center;
         }
@@ -86,7 +86,9 @@
             color: #555;
         }
 
-        .coaches-list {
+        .coaches-list,
+        .equipments-list,
+        .events-list {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
@@ -94,7 +96,9 @@
             margin-top: 20px;
         }
 
-        .coach-card {
+        .coach-card,
+        .equipment-card,
+        .event-card {
             width: 30%; /* Карточка занимает 30% ширины контейнера */
             aspect-ratio: 3 / 1; /* Соотношение сторон 1:3 */
             background-color: white;
@@ -106,24 +110,32 @@
             transition: transform 0.3s ease-in-out;
         }
 
-        .coach-card:hover {
+        .coach-card:hover,
+        .equipment-card:hover,
+        .event-card:hover {
             transform: translateY(-10px);
         }
 
-        .coach-card h3 {
+        .coach-card-content,
+        .equipment-card-content,
+        .event-card-content {
+            text-align: left;
+        }
+
+        .coach-card h3,
+        .equipment-card h3,
+        .event-card h3 {
             font-size: 18px;
             margin: 0;
             color: #333;
         }
 
-        .coach-card p {
+        .coach-card p,
+        .equipment-card p,
+        .event-card p {
             font-size: 14px;
             color: #555;
             margin: 5px 0 0 0;
-        }
-
-        .coach-card-content {
-            text-align: left;
         }
     </style>
 </head>
@@ -133,6 +145,8 @@
     <div class="navbar">
         <div class="nav-links">
             <a href="/gyms">Список спортзалов</a>
+            <a href="/equipment">Наше оборудование</a>
+            <a href="/gyms_passes">Абонементы</a>
             {{if eq .Role "admin"}}
                 <a href="/admin">Админ панель</a>
             {{end}}
@@ -155,6 +169,30 @@
             {{range .Coaches}}
             <div class="coach-card">
                 <div class="coach-card-content">
+                    <h3>{{.Name}}</h3>
+                    <p>{{.Description}}</p>
+                </div>
+            </div>
+            {{end}}
+        </div>
+
+        <h2>Доступные тренажёры</h2>
+        <div class="equipments-list">
+            {{range .Equipments}}
+            <div class="equipment-card">
+                <div class="equipment-card-content">
+                    <h3>{{.Name}}</h3>
+                    <p>{{.Description}}</p>
+                </div>
+            </div>
+            {{end}}
+        </div>
+
+        <h2>Актуальные тренировки</h2>
+        <div class="events-list">
+            {{range .Events}}
+            <div class="event-card">
+                <div class="event-card-content">
                     <h3>{{.Name}}</h3>
                     <p>{{.Description}}</p>
                 </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gyms</title>
+    <title>Gyms Passes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -78,8 +78,8 @@
             text-align: center;
         }
 
-        /* Стили для блока с залами */
-        .gym-card {
+        /* Стили для карточек абонементов */
+        .gym-pass-card {
             display: flex; /* Горизонтальное расположение */
             background-color: #fff;
             border-radius: 8px;
@@ -89,11 +89,11 @@
             transition: transform 0.3s ease-in-out;
         }
 
-        .gym-card:hover {
+        .gym-pass-card:hover {
             transform: translateY(-10px);
         }
 
-        .gym-card .gym-name {
+        .gym-pass-card .gym-name {
             width: 30%; /* Левый блок с названием */
             font-size: 24px;
             font-weight: bold;
@@ -103,35 +103,24 @@
             color: #333;
         }
 
-        .gym-card .gym-details {
-            width: 70%; /* Правый блок с адресом и описанием */
+        .gym-pass-card .gym-details {
+            width: 70%; /* Правый блок с деталями */
         }
 
-        .gym-card .gym-details p {
+        .gym-pass-card .gym-details p {
             font-size: 16px;
             margin-bottom: 10px;
             color: #555;
         }
 
-        .gym-card .gym-details a {
+        .gym-pass-card .gym-details a {
             color: #007bff;
             text-decoration: none;
             font-weight: bold;
         }
 
-        .gym-card .gym-details a:hover {
+        .gym-pass-card .gym-details a:hover {
             text-decoration: underline;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .footer a {
-            color: #007bff;
-            text-decoration: none;
         }
     </style>
 </head>
@@ -154,16 +143,15 @@
 
     <!-- Контентная часть -->
     <div class="container">
-        <h1>Список спортзалов</h1>
-        <!-- Блоки с залами -->
-        <div class="gym-list">
-            {{range .Gyms}}
-            <div class="gym-card">
+        <h1>Список абонементов</h1>
+        <!-- Карточки абонементов -->
+        <div class="gym-pass-list">
+            {{range .Passes}}
+            <div class="gym-pass-card">
                 <div class="gym-name">{{.Name}}</div>
                 <div class="gym-details">
-                    <p><strong>Адрес:</strong> {{.Address}}</p>
+                    <p><strong>Стоимость:</strong> {{.Price}}</p>
                     <p><strong>Описание:</strong> {{.Description}}</p>
-                    <a href="/gyms/{{.ID}}">Посмотреть детали</a>
                 </div>
             </div>
             {{end}}

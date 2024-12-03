@@ -1,6 +1,6 @@
 package models
 
-type GroupClass struct {
+type Event struct {
 	ID          int
 	Name        string
 	Description string
