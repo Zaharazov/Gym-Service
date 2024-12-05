@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #5a9bd5;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar .nav-links a:hover {
+            background-color: #3a7fb1;
+        }
+
+        .navbar .logout-btn {
+            background-color: transparent;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .navbar .logout-btn:hover {
+            background-color: #3a7fb1;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1200px;
+            margin-top: 80px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #5a9bd5;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-links">
+            <a href="/gyms">Список спортзалов</a>
+            <a href="/equipment">Наше оборудование</a>
+            <a href="/gyms_passes">Абонементы</a>
+            {{if eq .Role "admin"}}
+                <a href="/admin">Админ панель</a>
+            {{end}}
+            <form action="/logout" method="POST">
+                <button type="submit" class="logout-btn">Выйти</button>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Панель управления</h1>
+        <form method="POST" action="/admin">
+            <label for="gym_id">Введите ID зала:</label>
+            <input type="text" id="gym_id" name="gym_id" placeholder="ID зала">
+            <button type="submit">Найти</button>
+        </form>
+
+        {{if .Users}}
+        <h3>Пользователи</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Пароль</th>
+                <th>Имя</th>
+                <th>Возраст</th>
+                <th>Пол</th>
+                <th>Телефон</th>
+                <th>Абонемент ID</th>
+                <th>Зал ID</th>
+            </tr>
+            {{range .Users}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Login}}</td>
+                <td>{{.Password}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Age}}</td>
+                <td>{{.Sex}}</td>
+                <td>{{.Phone}}</td>
+                <td>{{.PassID}}</td>
+                <td>{{.GymID}}</td>
+            </tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p>Нет данных о пользователях.</p>
+        {{end}}
+
+        {{if .Admins}}
+        <h3>Администраторы</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Пароль</th>
+                <th>Имя</th>
+                <th>Уровень доступа</th>
+                <th>Телефон</th>
+                <th>Зал ID</th>
+            </tr>
+            {{range .Admins}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Login}}</td>
+                <td>{{.Password}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.AccessLevel}}</td>
+                <td>{{.Phone}}</td>
+                <td>{{.GymID}}</td>
+            </tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p>Нет данных об администраторах.</p>
+        {{end}}
+
+        {{if .Coaches}}
+        <h3>Тренеры</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Пароль</th>
+                <th>Имя</th>
+                <th>Возраст</th>
+                <th>Пол</th>
+                <th>Описание</th>
+                <th>Зал ID</th>
+            </tr>
+            {{range .Coaches}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Login}}</td>
+                <td>{{.Password}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Age}}</td>
+                <td>{{.Sex}}</td>
+                <td>{{.Description}}</td>
+                <td>{{.GymID}}</td>
+            </tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p>Нет данных о тренерах.</p>
+        {{end}}
+
+        {{if .Gyms}}
+        <h3>Залы</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Адрес</th>
+                <th>Описание</th>
+            </tr>
+            {{range .Gyms}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Address}}</td>
+                <td>{{.Description}}</td>
+            </tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p>Нет данных о залах.</p>
+        {{end}}
+
+        {{if .Passes}}
+        <h3>Абонементы</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Описание</th>
+            </tr>
+            {{range .Passes}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Price}}</td>
+                <td>{{.Description}}</td>
+            </tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p>Нет данных об абонементах.</p>
+        {{end}}
+
+        {{if .Equipment}}
+        <h3>Оборудование</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+            </tr>
+            {{range .Equipment}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Description}}</td>
+            </tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p>Нет данных об оборудовании.</p>
+        {{end}}
+
+        {{if .Events}}
+        <h3>Групповые тренировки</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Тренер ID</th>
+            </tr>
+            {{range .Events}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Description}}</td>
+                <td>{{.CoachID}}</td>
+            </tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p>Нет данных о групповых тренировках.</p>
+        {{end}}
+    </div>
+</body>
+</html>

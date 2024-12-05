@@ -33,4 +33,25 @@ var pages_routes = Routes{
 		"/gyms_passes",
 		services.GetGymsPassesPage,
 	},
+
+	Route{
+		"GetEqipmentPage",
+		strings.ToUpper("Get"),
+		"/equipment",
+		services.GetEquipmentPage,
+	},
+
+	Route{
+		"GetAdminPage",
+		strings.ToUpper("Get"),
+		"/admin",
+		services.GetAdminPage,
+	},
+
+	Route{
+		"GetAdminPage",
+		strings.ToUpper("Post"),
+		"/admin",
+		services.GetAdminPage,
+	},
 }
