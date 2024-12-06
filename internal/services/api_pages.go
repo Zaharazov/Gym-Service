@@ -21,6 +21,15 @@ func loadHTMLFile(filePath string) string {
 }
 
 func GetAuthPage(w http.ResponseWriter, r *http.Request) {
+
+	session, err := store.Get(r, "session-name")
+	if err == nil {
+		if auth, ok := session.Values["authenticated"].(bool); auth && ok {
+			http.Redirect(w, r, "/gyms", http.StatusFound)
+			return
+		}
+	}
+
 	w.Header().Set("Content-Type", "text/html")
 
 	html := loadHTMLFile("./frontend/pages/auth_page.html")
@@ -34,7 +43,7 @@ func GetGymsPage(w http.ResponseWriter, r *http.Request) {
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
 		return
 	}
 
@@ -72,7 +81,7 @@ func GetGymPageById(w http.ResponseWriter, r *http.Request) {
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
 		return
 	}
 
@@ -148,7 +157,7 @@ func GetGymsPassesPage(w http.ResponseWriter, r *http.Request) {
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
 		return
 	}
 
@@ -186,7 +195,7 @@ func GetEquipmentPage(w http.ResponseWriter, r *http.Request) {
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
 		return
 	}
 
@@ -222,10 +231,16 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
+
+	if !ok || !auth {
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
+		return
+	}
+
 	user_role := session.Values["role"].(string)
 
-	if !ok || !auth || user_role != "admin" {
-		http.Error(w, "Forbidden", http.StatusForbidden)
+	if user_role != "admin" {
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
 		return
 	}
 
