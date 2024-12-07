@@ -54,4 +54,11 @@ var pages_routes = Routes{
 		"/admin",
 		services.GetAdminPage,
 	},
+
+	Route{
+		"NotFoundPage",
+		strings.ToUpper("GET"),
+		"/{_:.*}",
+		services.NotFoundPage,
+	},
 }

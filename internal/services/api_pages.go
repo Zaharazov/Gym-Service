@@ -93,7 +93,7 @@ func GetGymPageById(w http.ResponseWriter, r *http.Request) {
 	gym, err := database.FetchGymByID(gymID)
 	if err != nil {
 		//fmt.Println(err)
-		http.Error(w, "Failed to fetch gym details", http.StatusInternalServerError)
+		http.ServeFile(w, r, "./frontend/pages/not_found_page.html")
 		return
 	}
 
@@ -383,4 +383,16 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 	if err := tmpl.Execute(w, data); err != nil {
 		http.Error(w, "Failed to render template", http.StatusInternalServerError)
 	}
+}
+
+func NotFoundPage(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session-name")
+	auth, ok := session.Values["authenticated"].(bool)
+
+	if !ok || !auth {
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
+		return
+	}
+
+	http.ServeFile(w, r, "./frontend/pages/not_found_page.html")
 }
