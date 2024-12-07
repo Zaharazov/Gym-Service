@@ -1,14 +1,16 @@
 package models
 
+import "database/sql"
+
 type User struct {
 	ID       int
 	Login    string
 	Password string
-	Active   bool
+	Active   sql.NullBool
 	Name     string
-	Age      int
-	Sex      string
-	Phone    string
-	PassID   int
-	GymID    int
+	Age      sql.NullInt64
+	Sex      sql.NullString
+	Phone    sql.NullString
+	PassID   sql.NullInt64
+	GymID    sql.NullInt64
 }

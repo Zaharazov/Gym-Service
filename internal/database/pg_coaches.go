@@ -33,3 +33,30 @@ func FetchCoaches() ([]models.Coach, error) {
 
 	return coaches, nil
 }
+
+func FindCoach(username string) (bool, string, error) {
+	connStr := configs.DBPath
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return false, "", err
+	}
+	defer db.Close()
+
+	var password string
+
+	query := `SELECT password FROM coaches WHERE login = $1 LIMIT 1;
+    `
+
+	// Выполнение SQL-запроса.
+	err = db.QueryRow(query, username).Scan(&password)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, "", nil // Пользователь не найден
+		}
+		return false, "", err // Ошибка базы данных
+	}
+
+	// Если строка найдена
+	exists := true
+	return exists, password, nil
+}

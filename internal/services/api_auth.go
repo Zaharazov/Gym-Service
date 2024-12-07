@@ -1,32 +1,52 @@
 package services
 
 import (
+	"Gym-Service/internal/database"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/sessions"
 )
 
-// добавить логику для бд !!!!!!!!!!!!!!!!!!!!!!!!!
-var users = map[string]string{
-	"user1": "password1", // Логин -> Пароль
-	"user2": "password2",
-}
-
-var admins = map[string]string{
-	"admin": "adminpass", // Логин -> Пароль
-}
-
 var store = sessions.NewCookieStore([]byte("super-secret-key"))
 
-// добавить логику для бд !!!!!!!!!!!!!!!!!!!!!!!!!
 func authenticate(username, password string) (string, bool) {
 	// Проверяем в таблице пользователей
-	if pass, exists := users[username]; exists && pass == password {
+
+	exist, pass, err := database.FindUser(username)
+
+	if err != nil {
+		fmt.Printf("Ошибка при проверке пользователя: %v\n", err)
+		return "", false
+	}
+
+	if exist && pass == password {
 		return "user", true
 	}
 
+	// Проверяем в таблице тренеров
+
+	exist, pass, err = database.FindCoach(username)
+
+	if err != nil {
+		fmt.Printf("Ошибка при проверке тренера: %v\n", err)
+		return "", false
+	}
+
+	if exist && pass == password {
+		return "coach", true
+	}
+
 	// Проверяем в таблице администраторов
-	if pass, exists := admins[username]; exists && pass == password {
+
+	exist, pass, err = database.FindAdmin(username)
+
+	if err != nil {
+		fmt.Printf("Ошибка при проверке админа: %v\n", err)
+		return "", false
+	}
+
+	if exist && pass == password {
 		return "admin", true
 	}
 
@@ -41,7 +61,8 @@ func GetSession(w http.ResponseWriter, r *http.Request) {
 	// Аутентифицируем пользователя
 	role, authenticated := authenticate(username, password)
 	if !authenticated {
-		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+		http.Redirect(w, r, "/", http.StatusFound)
+		//http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 		return
 	}
 

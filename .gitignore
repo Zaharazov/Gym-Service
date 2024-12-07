@@ -1,3 +1,4 @@
 # Игнорировать файлы конфигурации
 *.log
 *.env
+migrations/temp_droptable.sql

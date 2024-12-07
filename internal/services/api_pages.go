@@ -386,6 +386,7 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func NotFoundPage(w http.ResponseWriter, r *http.Request) {
+
 	session, _ := store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
@@ -395,4 +396,13 @@ func NotFoundPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.ServeFile(w, r, "./frontend/pages/not_found_page.html")
+}
+
+func RegisterPage(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "text/html")
+
+	html := loadHTMLFile("./frontend/pages/register_page.html")
+
+	fmt.Fprint(w, html)
 }

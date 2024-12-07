@@ -1,12 +1,14 @@
 package models
 
+import "database/sql"
+
 type Coach struct {
 	ID          int
 	Login       string
 	Password    string
 	Name        string
-	Age         int
-	Sex         string
-	Description string
-	GymID       int
+	Age         sql.NullInt64
+	Sex         sql.NullString
+	Description sql.NullString
+	GymID       sql.NullInt64
 }

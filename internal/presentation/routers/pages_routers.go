@@ -56,8 +56,15 @@ var pages_routes = Routes{
 	},
 
 	Route{
+		"RegisterPage",
+		strings.ToUpper("Get"),
+		"/register",
+		services.RegisterPage,
+	},
+
+	Route{
 		"NotFoundPage",
-		strings.ToUpper("GET"),
+		strings.ToUpper("Get"),
 		"/{_:.*}",
 		services.NotFoundPage,
 	},
