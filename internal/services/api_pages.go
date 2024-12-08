@@ -245,6 +245,9 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var (
+		count_user  int
+		count_admin int
+		count_coach int
 		gym         models.Gym
 		users       []models.User
 		coaches     []models.Coach
@@ -255,6 +258,19 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 		events      []models.Event
 		err         error
 	)
+
+	count_user, err = database.CountUsers()
+	count_admin, err = database.CountAdmins()
+	count_coach, err = database.CountCoaches()
+
+	// Генерация графика
+	graphPath := "./frontend/data/admin_graph.png"
+	err = database.GenerateGraph(graphPath, count_user, count_admin, count_coach)
+	if err != nil {
+		fmt.Println("Error generating graph:", err)
+		http.Error(w, "Failed to generate graph", http.StatusInternalServerError)
+		return
+	}
 
 	gymID := r.FormValue("gym_id")
 
@@ -363,6 +379,7 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 		Passes    []models.Pass
 		Equipment []models.Equipment
 		Events    []models.Event
+		GraphPath string
 	}{
 		Role:      user_role,
 		Users:     users,
@@ -372,6 +389,7 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 		Passes:    gyms_passes,
 		Equipment: equipments,
 		Events:    events,
+		GraphPath: graphPath,
 	}
 
 	tmpl, err := template.ParseFiles("./frontend/pages/admin_page.html")

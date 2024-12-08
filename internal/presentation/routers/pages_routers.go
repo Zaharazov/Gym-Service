@@ -63,6 +63,13 @@ var pages_routes = Routes{
 	},
 
 	Route{
+		"DataPage",
+		strings.ToUpper("Get"),
+		"/frontend/{_:.*}",
+		services.DataPage,
+	},
+
+	Route{
 		"NotFoundPage",
 		strings.ToUpper("Get"),
 		"/{_:.*}",

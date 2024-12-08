@@ -76,8 +76,7 @@ func FindUser(username string) (bool, string, error) {
 
 	var password string
 
-	query := `SELECT password FROM users WHERE login = $1 LIMIT 1;
-    `
+	query := `SELECT password FROM users WHERE login = $1 LIMIT 1;`
 
 	// Выполнение SQL-запроса.
 	err = db.QueryRow(query, username).Scan(&password)
@@ -91,4 +90,27 @@ func FindUser(username string) (bool, string, error) {
 	// Если строка найдена
 	exists := true
 	return exists, password, nil
+}
+
+func CountUsers() (int, error) {
+	connStr := configs.DBPath
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+
+	var count int
+
+	query := `SELECT COUNT(user_id) FROM users`
+
+	err = db.QueryRow(query).Scan(&count)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, nil
+		}
+		return 0, err
+	}
+
+	return count, nil
 }

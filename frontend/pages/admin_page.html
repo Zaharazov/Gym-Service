@@ -95,6 +95,11 @@
             background-color: #5a9bd5;
             color: white;
         }
+
+        img {
+            display: block;
+            margin: 0 auto; 
+        }
     </style>
 </head>
 <body>
@@ -294,6 +299,11 @@
         {{else}}
         <p>Нет данных о групповых тренировках.</p>
         {{end}}
+
+        <h1>График пользователей</h1>
+        <img src="{{.GraphPath}}" alt="График количества пользователей, администраторов и тренеров">
     </div>
+    
+
 </body>
 </html>

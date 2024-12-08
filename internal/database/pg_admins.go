@@ -61,3 +61,26 @@ func FindAdmin(username string) (bool, string, error) {
 	exists := true
 	return exists, password, nil
 }
+
+func CountAdmins() (int, error) {
+	connStr := configs.DBPath
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+
+	var count int
+
+	query := `SELECT COUNT(admin_id) FROM admins`
+
+	err = db.QueryRow(query).Scan(&count)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, nil
+		}
+		return 0, err
+	}
+
+	return count, nil
+}
