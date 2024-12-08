@@ -23,3 +23,40 @@ func ConnectToPostrges() {
 
 	fmt.Println("Successfully connected!")
 }
+
+func CreateTrigger(db *sql.DB) error {
+	// SQL для создания функции
+	createFunction := `
+	CREATE OR REPLACE FUNCTION log_user_registration()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		PERFORM pg_notify('user_registration', 'User registered with ID: ' || NEW.user_id || ', Name: ' || NEW.name);
+		RETURN NEW;
+	END;
+	$$ LANGUAGE plpgsql;
+	`
+
+	// SQL для создания триггера
+	createTrigger := `
+	CREATE TRIGGER user_registration_trigger
+	AFTER INSERT ON users
+	FOR EACH ROW
+	EXECUTE FUNCTION log_user_registration();
+	`
+
+	// Выполняем запросы
+	_, err := db.Exec(createFunction)
+	if err != nil {
+		log.Printf("Error creating function: %v", err)
+		return err
+	}
+
+	_, err = db.Exec(createTrigger)
+	if err != nil {
+		log.Printf("Error creating trigger: %v", err)
+		return err
+	}
+
+	log.Println("Trigger and function created successfully.")
+	return nil
+}

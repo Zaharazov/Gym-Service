@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-func DataPage(w http.ResponseWriter, r *http.Request) {
+func GetData(w http.ResponseWriter, r *http.Request) {
 	// Путь к папке со статическими файлами
 	staticDir := "./frontend"
 
