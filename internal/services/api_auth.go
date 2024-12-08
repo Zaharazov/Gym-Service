@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/sessions"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var store = sessions.NewCookieStore([]byte("super-secret-key"))
@@ -13,40 +14,43 @@ var store = sessions.NewCookieStore([]byte("super-secret-key"))
 func authenticate(username, password string) (string, bool) {
 	// Проверяем в таблице пользователей
 
-	exist, pass, err := database.FindUser(username)
+	exist, hashPass, err := database.FindUser(username)
 
 	if err != nil {
 		fmt.Printf("Ошибка при проверке пользователя: %v\n", err)
 		return "", false
 	}
 
-	if exist && pass == password {
+	err = bcrypt.CompareHashAndPassword([]byte(hashPass), []byte(password))
+	if exist && err == nil {
 		return "user", true
 	}
 
 	// Проверяем в таблице тренеров
 
-	exist, pass, err = database.FindCoach(username)
+	exist, hashPass, err = database.FindCoach(username)
 
 	if err != nil {
 		fmt.Printf("Ошибка при проверке тренера: %v\n", err)
 		return "", false
 	}
 
-	if exist && pass == password {
+	err = bcrypt.CompareHashAndPassword([]byte(hashPass), []byte(password))
+	if exist && err == nil {
 		return "coach", true
 	}
 
 	// Проверяем в таблице администраторов
 
-	exist, pass, err = database.FindAdmin(username)
+	exist, hashPass, err = database.FindAdmin(username)
 
 	if err != nil {
 		fmt.Printf("Ошибка при проверке админа: %v\n", err)
 		return "", false
 	}
 
-	if exist && pass == password {
+	err = bcrypt.CompareHashAndPassword([]byte(hashPass), []byte(password))
+	if exist && err == nil {
 		return "admin", true
 	}
 

@@ -25,6 +25,26 @@ func ConnectToPostrges() {
 }
 
 func CreateTrigger(db *sql.DB) error {
+
+	checkTriggerQuery := `
+	SELECT EXISTS (
+		SELECT 1 
+		FROM pg_trigger 
+		WHERE tgname = 'user_registration_trigger' 
+	);`
+
+	var exists bool
+	err := db.QueryRow(checkTriggerQuery).Scan(&exists)
+	if err != nil {
+		log.Printf("Error checking if trigger exists: %v", err)
+		return err
+	}
+
+	if exists {
+		log.Println("Trigger already exists.")
+		return nil
+	}
+
 	// SQL для создания функции
 	createFunction := `
 	CREATE OR REPLACE FUNCTION log_user_registration()
@@ -45,7 +65,7 @@ func CreateTrigger(db *sql.DB) error {
 	`
 
 	// Выполняем запросы
-	_, err := db.Exec(createFunction)
+	_, err = db.Exec(createFunction)
 	if err != nil {
 		log.Printf("Error creating function: %v", err)
 		return err

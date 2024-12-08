@@ -4,6 +4,8 @@ import (
 	"Gym-Service/internal/database"
 	"fmt"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func RegUser(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +20,10 @@ func RegUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := database.AddUser(name, username, password)
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hashedPasswordStr := string(hashedPassword)
+
+	err := database.AddUser(name, username, hashedPasswordStr)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, "/register", http.StatusFound)
