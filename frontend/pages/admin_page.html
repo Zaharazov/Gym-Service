@@ -100,6 +100,46 @@
             display: block;
             margin: 0 auto; 
         }
+
+        .backup-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .backup-buttons button {
+            background-color: #5a9bd5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .backup-buttons button:hover {
+            background-color: #3a7fb1;
+        }
+
+        .backup-buttons input[type="file"] {
+            display: none;
+        }
+
+        .backup-buttons label {
+            background-color: #5a9bd5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .backup-buttons label:hover {
+            background-color: #3a7fb1;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +158,17 @@
     </div>
     <div class="container">
         <h1>Панель управления</h1>
+        <div class="backup-buttons">
+            <form method="POST" action="/admin/backup">
+                <button type="submit">Сохранить бэкап</button>
+            </form>
+
+            <form method="POST" action="/admin/restore" enctype="multipart/form-data">
+                <label for="backupFile">Выберите файл для восстановления:</label>
+                <input type="file" id="backupFile" name="backup_file">
+                <button type="submit">Восстановить из бэкапа</button>
+            </form>
+        </div>
         <form method="POST" action="/admin">
             <label for="gym_id">Введите ID зала:</label>
             <input type="text" id="gym_id" name="gym_id" placeholder="ID зала">

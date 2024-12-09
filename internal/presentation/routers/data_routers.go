@@ -13,4 +13,18 @@ var data_routes = Routes{
 		"/frontend/{_:.*}",
 		services.GetData,
 	},
+
+	Route{
+		"RestoreBackup",
+		strings.ToUpper("Post"),
+		"/admin/restore",
+		services.RestoreBackup,
+	},
+
+	Route{
+		"CreateBackup",
+		strings.ToUpper("Post"),
+		"/admin/backup",
+		services.CreateBackup,
+	},
 }

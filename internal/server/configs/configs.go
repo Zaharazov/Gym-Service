@@ -8,8 +8,11 @@ import (
 )
 
 var (
-	Port   = GetConfigs("httpPort")
-	DBPath = GetConfigs("dbPath")
+	Port     = GetConfigs("httpPort")
+	DBPath   = GetConfigs("dbPath")
+	DBName   = GetConfigs("dbName")
+	Username = GetConfigs("username")
+	Password = GetConfigs("password")
 )
 
 func GetConfigs(param string) string {
