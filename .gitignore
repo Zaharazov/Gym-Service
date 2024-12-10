@@ -2,3 +2,4 @@
 *.log
 *.env
 migrations/temp_droptable.sql
+migrations/temp_truncate.sql
