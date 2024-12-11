@@ -15,6 +15,13 @@ var data_routes = Routes{
 	},
 
 	Route{
+		"CreateEvent",
+		strings.ToUpper("Post"),
+		"/events",
+		services.CreateEvent,
+	},
+
+	Route{
 		"RestoreBackup",
 		strings.ToUpper("Post"),
 		"/admin/restore",

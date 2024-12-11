@@ -42,6 +42,13 @@ var pages_routes = Routes{
 	},
 
 	Route{
+		"GetEventsPage",
+		strings.ToUpper("Get"),
+		"/events",
+		services.GetEventsPage,
+	},
+
+	Route{
 		"GetAdminPage",
 		strings.ToUpper("Get"),
 		"/admin",

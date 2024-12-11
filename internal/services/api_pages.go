@@ -227,6 +227,48 @@ func GetEquipmentPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetEventsPage(w http.ResponseWriter, r *http.Request) {
+
+	session, _ := store.Get(r, "session-name")
+	auth, ok := session.Values["authenticated"].(bool)
+
+	if !ok || !auth {
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
+		return
+	}
+
+	user_role := session.Values["role"].(string)
+
+	if user_role != "coach" && user_role != "admin" {
+		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")
+		return
+	}
+
+	events, err := database.FetchEvents()
+	if err != nil {
+		http.Error(w, "Failed to fetch events", http.StatusInternalServerError)
+		return
+	}
+
+	data := struct {
+		Role   string
+		Events []models.Event
+	}{
+		Role:   user_role,
+		Events: events,
+	}
+
+	tmpl, err := template.ParseFiles("./frontend/pages/events_page.html")
+	if err != nil {
+		http.Error(w, "Failed to load template", http.StatusInternalServerError)
+		return
+	}
+
+	if err := tmpl.Execute(w, data); err != nil {
+		http.Error(w, "Failed to render template", http.StatusInternalServerError)
+	}
+}
+
 func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := store.Get(r, "session-name")

@@ -143,6 +143,9 @@
             <a href="/gyms">Список спортзалов</a>
             <a href="/equipment">Наше оборудование</a>
             <a href="/gyms_passes">Абонементы</a>
+            {{if or (eq .Role "admin") (eq .Role "coach")}}
+                <a href="/events">Занятия</a>
+            {{end}}
             {{if eq .Role "admin"}}
                 <a href="/admin">Админ панель</a>
             {{end}}

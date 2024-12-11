@@ -33,3 +33,26 @@ func FetchEvents() ([]models.Event, error) {
 
 	return events, nil
 }
+
+func AddEvent(name, description string, id int) error {
+
+	connStr := configs.DBPath
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	query := "INSERT INTO events (name, description, coach_id) VALUES ($1, $2, $3)"
+	if id == 0 {
+		_, err = db.Exec(query, name, description, nil)
+	} else {
+		_, err = db.Exec(query, name, description, id)
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

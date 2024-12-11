@@ -56,7 +56,7 @@ CREATE TABLE "events" (
     "event_id" SERIAL PRIMARY KEY, -- Автоинкрементируемый ID
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "coach_id" BIGINT NOT NULL
+    "coach_id" BIGINT
 );
 
 CREATE TABLE "availability" (
