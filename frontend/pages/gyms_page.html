@@ -187,7 +187,7 @@
                     <p><strong>Описание:</strong> {{.Description}}</p>
                     <a href="/gyms/{{.ID}}">Посмотреть детали</a>
                 </div>
-                {{if eq $.Role "user"}}
+                {{if or (eq $.Role "admin") (eq $.Role "user")}}
                     <!-- Форма для записи в зал -->
                     <form action="/set_gym" method="POST">
                         <input type="hidden" name="gym_id" value="{{.ID}}">

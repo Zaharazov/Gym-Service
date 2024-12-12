@@ -133,22 +133,3 @@ func SetUserPassID(login string, passID sql.NullInt64) error {
 
 	return nil
 }
-
-func SetUserGymID(login string, gymID sql.NullInt64) error {
-
-	connStr := configs.DBPath
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	query := "UPDATE users SET gym_id = $1 WHERE login = $2"
-
-	_, err = db.Exec(query, gymID, login)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}

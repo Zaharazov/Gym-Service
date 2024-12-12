@@ -51,6 +51,7 @@ func SetGym(w http.ResponseWriter, r *http.Request) {
 	}
 
 	username := session.Values["username"].(string)
+	role := session.Values["role"].(string)
 
 	gymIDStr := r.FormValue("gym_id")
 
@@ -63,7 +64,7 @@ func SetGym(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Обновляем pass_id пользователя в базе данных
-	err := database.SetUserGymID(username, nullableGymID)
+	err := database.SetUserGymID(role, username, nullableGymID)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, "/gyms", http.StatusFound)

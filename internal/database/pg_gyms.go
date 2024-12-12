@@ -219,3 +219,28 @@ func FetchAdminsForGym(id string) ([]models.Admin, error) {
 
 	return admins, nil
 }
+
+func SetUserGymID(role, login string, gymID sql.NullInt64) error {
+
+	connStr := configs.DBPath
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	var query string
+
+	if role == "admin" {
+		query = "UPDATE admins SET gym_id = $1 WHERE login = $2"
+	} else if role == "user" {
+		query = "UPDATE users SET gym_id = $1 WHERE login = $2"
+	}
+
+	_, err = db.Exec(query, gymID, login)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
