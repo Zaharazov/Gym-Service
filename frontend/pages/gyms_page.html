@@ -123,6 +123,25 @@
             text-decoration: underline;
         }
 
+        /* Кнопка для записи */
+        .attach-btn {
+            background-color: #5a9bd5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        .attach-btn:hover {
+            background-color: #3a7fb1;
+        }
+
         .footer {
             margin-top: 20px;
             font-size: 14px;
@@ -168,6 +187,13 @@
                     <p><strong>Описание:</strong> {{.Description}}</p>
                     <a href="/gyms/{{.ID}}">Посмотреть детали</a>
                 </div>
+                {{if eq $.Role "user"}}
+                    <!-- Форма для записи в зал -->
+                    <form action="/set_gym" method="POST">
+                        <input type="hidden" name="gym_id" value="{{.ID}}">
+                        <button type="submit" class="attach-btn">Записаться в зал</button>
+                    </form>
+                {{end}}
             </div>
             {{end}}
         </div>

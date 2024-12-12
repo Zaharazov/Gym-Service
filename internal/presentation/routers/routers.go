@@ -20,6 +20,8 @@ var routes Routes
 
 func NewRouter() *mux.Router {
 
+	routes = append(routes, gyms_routes...)
+	routes = append(routes, passes_routes...)
 	routes = append(routes, data_routes...)
 	routes = append(routes, pages_routes...)
 	routes = append(routes, auth_routes...)
