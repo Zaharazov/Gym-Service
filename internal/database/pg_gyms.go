@@ -180,7 +180,7 @@ func FetchUsersForGym(id string) ([]models.User, error) {
 	var users []models.User
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.ID, &user.Login, &user.Password, &user.Active, &user.Name, &user.Age, &user.Sex, &user.Phone, &user.PassID, &user.GymID); err != nil {
+		if err := rows.Scan(&user.ID, &user.Login, &user.Password, &user.Name, &user.Age, &user.Sex, &user.Phone, &user.PassID, &user.GymID); err != nil {
 			return nil, err
 		}
 		users = append(users, user)
@@ -211,7 +211,7 @@ func FetchAdminsForGym(id string) ([]models.Admin, error) {
 	var admins []models.Admin
 	for rows.Next() {
 		var admin models.Admin
-		if err := rows.Scan(&admin.ID, &admin.Login, &admin.Password, &admin.Name, &admin.AccessLevel, &admin.Phone, &admin.GymID); err != nil {
+		if err := rows.Scan(&admin.ID, &admin.Login, &admin.Password, &admin.Name, &admin.Phone, &admin.GymID); err != nil {
 			return nil, err
 		}
 		admins = append(admins, admin)

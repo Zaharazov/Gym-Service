@@ -67,7 +67,6 @@ func CreateAdmin(w http.ResponseWriter, r *http.Request) {
 	login := r.FormValue("login")
 	password := r.FormValue("password")
 	name := r.FormValue("name")
-	accessLevel, _ := strconv.Atoi(r.FormValue("access_level"))
 	phone := r.FormValue("phone")
 
 	// Сбор необязательных данных
@@ -85,7 +84,7 @@ func CreateAdmin(w http.ResponseWriter, r *http.Request) {
 	hashedPasswordStr := string(hashedPassword)
 
 	// Вызов функции добавления администратора в базу данных
-	err := database.AddAdmin(login, hashedPasswordStr, name, accessLevel, phone, nullableGymID)
+	err := database.AddAdmin(login, hashedPasswordStr, name, phone, nullableGymID)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, "/admin", http.StatusFound)

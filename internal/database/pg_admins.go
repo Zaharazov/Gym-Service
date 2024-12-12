@@ -26,7 +26,7 @@ func FetchAdmins() ([]models.Admin, error) {
 	var admins []models.Admin
 	for rows.Next() {
 		var admin models.Admin
-		if err := rows.Scan(&admin.ID, &admin.Login, &admin.Password, &admin.Name, &admin.AccessLevel, &admin.Phone, &admin.GymID); err != nil {
+		if err := rows.Scan(&admin.ID, &admin.Login, &admin.Password, &admin.Name, &admin.Phone, &admin.GymID); err != nil {
 			return nil, err
 		}
 		admins = append(admins, admin)
@@ -85,7 +85,7 @@ func CountAdmins() (int, error) {
 	return count, nil
 }
 
-func AddAdmin(login, password, name string, accessLevel int, phone string, gymID sql.NullInt64) error {
+func AddAdmin(login, password, name string, phone string, gymID sql.NullInt64) error {
 	// Подключение к базе данных
 	connStr := configs.DBPath
 	db, err := sql.Open("postgres", connStr)
@@ -95,10 +95,10 @@ func AddAdmin(login, password, name string, accessLevel int, phone string, gymID
 	defer db.Close()
 
 	// Запрос для вставки данных администратора
-	query := `INSERT INTO admins (login, password, name, access_level, phone, gym_id) VALUES ($1, $2, $3, $4, $5, $6)`
+	query := `INSERT INTO admins (login, password, name, phone, gym_id) VALUES ($1, $2, $3, $4, $5)`
 
 	// Выполнение запроса с параметрами
-	_, err = db.Exec(query, login, password, name, accessLevel, phone, gymID)
+	_, err = db.Exec(query, login, password, name, phone, gymID)
 
 	if err != nil {
 		return err

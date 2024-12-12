@@ -6,7 +6,6 @@ type User struct {
 	ID       int
 	Login    string
 	Password string
-	Active   sql.NullBool
 	Name     string
 	Age      int
 	Sex      string
