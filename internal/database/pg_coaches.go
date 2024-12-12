@@ -4,6 +4,8 @@ import (
 	"Gym-Service/internal/domain/models"
 	"Gym-Service/internal/server/configs"
 	"database/sql"
+	"errors"
+	"fmt"
 )
 
 func FetchCoaches() ([]models.Coach, error) {
@@ -85,7 +87,7 @@ func CountCoaches() (int, error) {
 }
 
 func AddCoach(login, password, name string, age int, sex string, description string, gymID sql.NullInt64) error {
-	// Подключение к базе данных
+
 	connStr := configs.DBPath
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -93,19 +95,23 @@ func AddCoach(login, password, name string, age int, sex string, description str
 	}
 	defer db.Close()
 
+	var exists bool
+	query := "SELECT EXISTS ( SELECT 1 FROM users WHERE login = $1 UNION SELECT 1 FROM admins WHERE login = $1 UNION SELECT 1 FROM coaches WHERE login = $1)"
+	err = db.QueryRow(query, login).Scan(&exists)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		fmt.Println(err)
+		return errors.New("login already exists")
+	}
+
 	// Запрос для вставки данных тренера
-	query := `INSERT INTO coaches (login, password, name, age, sex, description, gym_id) VALUES ($1, $2, $3, $4, $5, $6, $7)`
+	query = `INSERT INTO coaches (login, password, name, age, sex, description, gym_id) VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
 	// Выполнение запроса с параметрами
-	_, err = db.Exec(query,
-		login,
-		password,
-		name,
-		age,
-		sex,
-		description,
-		gymID,
-	)
+	_, err = db.Exec(query, login, password, name, age, sex, description, gymID)
 
 	if err != nil {
 		return err

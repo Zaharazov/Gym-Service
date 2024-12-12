@@ -4,6 +4,8 @@ import (
 	"Gym-Service/internal/domain/models"
 	"Gym-Service/internal/server/configs"
 	"database/sql"
+	"errors"
+	"fmt"
 )
 
 func FetchAdmins() ([]models.Admin, error) {
@@ -86,7 +88,7 @@ func CountAdmins() (int, error) {
 }
 
 func AddAdmin(login, password, name string, phone string, gymID sql.NullInt64) error {
-	// Подключение к базе данных
+
 	connStr := configs.DBPath
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -94,8 +96,20 @@ func AddAdmin(login, password, name string, phone string, gymID sql.NullInt64) e
 	}
 	defer db.Close()
 
+	var exists bool
+	query := "SELECT EXISTS ( SELECT 1 FROM users WHERE login = $1 UNION SELECT 1 FROM admins WHERE login = $1 UNION SELECT 1 FROM coaches WHERE login = $1)"
+	err = db.QueryRow(query, login).Scan(&exists)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		fmt.Println(err)
+		return errors.New("login already exists")
+	}
+
 	// Запрос для вставки данных администратора
-	query := `INSERT INTO admins (login, password, name, phone, gym_id) VALUES ($1, $2, $3, $4, $5)`
+	query = `INSERT INTO admins (login, password, name, phone, gym_id) VALUES ($1, $2, $3, $4, $5)`
 
 	// Выполнение запроса с параметрами
 	_, err = db.Exec(query, login, password, name, phone, gymID)

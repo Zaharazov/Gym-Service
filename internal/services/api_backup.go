@@ -20,7 +20,7 @@ func CreateBackup(w http.ResponseWriter, r *http.Request) {
 	cmd.Env = append(cmd.Env, "PGPASSWORD="+configs.Password)
 
 	if err := cmd.Run(); err != nil {
-		log.Println(err)
+		log.Printf("Error creating backup: %v", err)
 		http.Error(w, fmt.Sprintf("Failed to create backup: %v", err), http.StatusInternalServerError)
 		return
 	}
@@ -38,7 +38,8 @@ func RestoreBackup(w http.ResponseWriter, r *http.Request) {
 	// Получаем файл из формы
 	file, handler, err := r.FormFile("backup_file")
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to retrieve file: %v", err), http.StatusBadRequest)
+		log.Printf("Error retrieving file from form: %v", err)
+		http.Redirect(w, r, "/admin", http.StatusFound)
 		return
 	}
 	defer file.Close()
@@ -47,6 +48,7 @@ func RestoreBackup(w http.ResponseWriter, r *http.Request) {
 	backupFilePath := fmt.Sprintf("./internal/database/data/%s", handler.Filename)
 	dst, err := os.Create(backupFilePath)
 	if err != nil {
+		log.Printf("Error creating file to save backup: %v", err)
 		http.Error(w, fmt.Sprintf("Failed to save file: %v", err), http.StatusInternalServerError)
 		return
 	}
@@ -54,6 +56,7 @@ func RestoreBackup(w http.ResponseWriter, r *http.Request) {
 
 	// Копируем содержимое файла
 	if _, err := io.Copy(dst, file); err != nil {
+		log.Printf("Error copying file contents: %v", err)
 		http.Error(w, fmt.Sprintf("Failed to save file: %v", err), http.StatusInternalServerError)
 		return
 	}
@@ -66,6 +69,7 @@ func RestoreBackup(w http.ResponseWriter, r *http.Request) {
 	cmd.Env = append(os.Environ(), "PGPASSWORD="+configs.Password)
 
 	if err := cmd.Run(); err != nil {
+		log.Printf("Error restoring schema: %v", err)
 		http.Redirect(w, r, "/admin", http.StatusFound)
 		return
 	}
@@ -75,6 +79,7 @@ func RestoreBackup(w http.ResponseWriter, r *http.Request) {
 	cmd.Env = append(os.Environ(), "PGPASSWORD="+configs.Password)
 
 	if err := cmd.Run(); err != nil {
+		log.Printf("Error restoring data: %v", err)
 		http.Redirect(w, r, "/admin", http.StatusFound)
 		return
 	}

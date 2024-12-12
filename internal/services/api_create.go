@@ -48,14 +48,11 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateCoach(w http.ResponseWriter, r *http.Request) {
-	// Извлечение обязательных параметров
 	login := r.FormValue("login")
 	password := r.FormValue("password")
 	name := r.FormValue("name")
 	age, _ := strconv.Atoi(r.FormValue("age"))
 	sex := r.FormValue("sex")
-
-	// Извлечение необязательных параметров
 	description := r.FormValue("description")
 	gymIDStr := r.FormValue("gym_id")
 
@@ -71,7 +68,6 @@ func CreateCoach(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	hashedPasswordStr := string(hashedPassword)
 
-	// Передача данных во внутреннюю функцию
 	err := database.AddCoach(login, hashedPasswordStr, name, age, sex, description, nullableGymID)
 	if err != nil {
 		fmt.Println(err)
@@ -89,8 +85,6 @@ func CreateAdmin(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 	name := r.FormValue("name")
 	phone := r.FormValue("phone")
-
-	// Сбор необязательных данных
 	gymIDStr := r.FormValue("gym_id")
 
 	var nullableGymID sql.NullInt64

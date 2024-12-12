@@ -25,10 +25,9 @@ func GetConfigs(param string) string {
 	Data, exists := os.LookupEnv(param)
 
 	if exists {
-		Data = os.Getenv(param)
 		log.Printf("%s is %s", param, Data)
 	} else {
-		log.Printf("%s is missing", param)
+		log.Fatalf("%s is missing", param)
 	}
 
 	return Data

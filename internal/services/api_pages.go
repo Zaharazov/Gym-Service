@@ -30,11 +30,28 @@ func GetAuthPage(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	w.Header().Set("Content-Type", "text/html")
+	// Загружаем шаблон
+	tmpl, err := template.ParseFiles("./frontend/pages/auth_page.html")
+	if err != nil {
+		http.Error(w, "Error loading template", http.StatusInternalServerError)
+		return
+	}
 
-	html := loadHTMLFile("./frontend/pages/auth_page.html")
+	// Получаем ошибку из сессии, если она есть
+	errorMessage := session.Values["error"]
+	session.Values["error"] = nil // Очищаем ошибку после того, как отобразили её
+	session.Save(r, w)
 
-	fmt.Fprint(w, html)
+	data := map[string]interface{}{
+		"Error": errorMessage,
+	}
+
+	// Отправляем данные в шаблон
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
 }
 
 func GetGymsPage(w http.ResponseWriter, r *http.Request) {

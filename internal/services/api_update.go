@@ -63,7 +63,7 @@ func SetGym(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Обновляем pass_id пользователя в базе данных
+	// Обновляем gym_id пользователя в базе данных
 	err := database.SetUserGymID(role, username, nullableGymID)
 	if err != nil {
 		fmt.Println(err)

@@ -20,7 +20,6 @@ func RegUser(w http.ResponseWriter, r *http.Request) {
 
 	if password != confirm_password {
 		http.Redirect(w, r, "/register", http.StatusFound)
-		//http.Error(w, "Passwords do not match", http.StatusBadRequest)
 		return
 	}
 
@@ -31,7 +30,6 @@ func RegUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, "/register", http.StatusFound)
-		//http.Error(w, "Failed to register user", http.StatusInternalServerError)
 		return
 	}
 

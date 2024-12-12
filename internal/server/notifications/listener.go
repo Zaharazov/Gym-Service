@@ -12,7 +12,10 @@ func StartNotificationListener(connStr string) {
 	// Подключение к базе данных
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatalf("Failed to open database connection: %v", err)
+	}
+	if err := db.Ping(); err != nil {
+		log.Fatalf("Failed to ping database: %v", err)
 	}
 	defer db.Close()
 

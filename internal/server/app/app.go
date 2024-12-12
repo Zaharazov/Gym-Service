@@ -6,7 +6,6 @@ import (
 	"Gym-Service/internal/server/configs"
 	"Gym-Service/internal/server/notifications"
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -21,6 +20,13 @@ func Run() {
 
 	connStr := configs.DBPath
 	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatalf("Failed to open database connection: %v", err)
+	}
+
+	if err := db.Ping(); err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
 
 	err = database.CreateTrigger(db)
 	if err != nil {
@@ -33,6 +39,6 @@ func Run() {
 	}()
 
 	if err := http.ListenAndServe(configs.Port, r); err != nil {
-		fmt.Println("Error starting server:", err)
+		log.Fatalf("Error starting server: %v", err)
 	}
 }
