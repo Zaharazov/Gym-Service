@@ -34,7 +34,7 @@ func FetchEvents() ([]models.Event, error) {
 	return events, nil
 }
 
-func AddEvent(name, description string, id int) error {
+func AddEvent(name, description string, coach_id, gym_id sql.NullInt64, eventTime, eventDate string) error {
 
 	connStr := configs.DBPath
 	db, err := sql.Open("postgres", connStr)
@@ -43,12 +43,17 @@ func AddEvent(name, description string, id int) error {
 	}
 	defer db.Close()
 
-	query := "INSERT INTO events (name, description, coach_id) VALUES ($1, $2, $3)"
-	if id == 0 {
-		_, err = db.Exec(query, name, description, nil)
-	} else {
-		_, err = db.Exec(query, name, description, id)
+	var event_id int
+
+	query := "INSERT INTO events (name, description, coach_id) VALUES ($1, $2, $3) RETURNING event_id"
+	err = db.QueryRow(query, name, description, coach_id).Scan(&event_id)
+
+	if err != nil {
+		return err
 	}
+
+	query = "INSERT INTO current_events (gym_id, event_id, time, data) VALUES ($1, $2, $3, $4)"
+	_, err = db.Exec(query, gym_id, event_id, eventTime, eventDate)
 
 	if err != nil {
 		return err

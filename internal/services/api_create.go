@@ -14,9 +14,30 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 
 	name := r.FormValue("name")
 	description := r.FormValue("description")
-	id, _ := strconv.Atoi(r.FormValue("coach_id"))
+	coachIDStr := r.FormValue("coach_id")
 
-	err := database.AddEvent(name, description, id)
+	var nullableCoachID sql.NullInt64
+	if coachIDStr != "" {
+		parsedCoachID, err := strconv.Atoi(coachIDStr)
+		if err == nil {
+			nullableCoachID = sql.NullInt64{Int64: int64(parsedCoachID), Valid: true}
+		}
+	}
+
+	gymIDStr := r.FormValue("gym_id")
+
+	var nullableGymID sql.NullInt64
+	if gymIDStr != "" {
+		parsedGymID, err := strconv.Atoi(gymIDStr)
+		if err == nil {
+			nullableGymID = sql.NullInt64{Int64: int64(parsedGymID), Valid: true}
+		}
+	}
+
+	time := r.FormValue("time")
+	date := r.FormValue("date")
+
+	err := database.AddEvent(name, description, nullableCoachID, nullableGymID, time, date)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, "/events", http.StatusFound)
