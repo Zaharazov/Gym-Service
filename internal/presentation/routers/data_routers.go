@@ -22,6 +22,20 @@ var data_routes = Routes{
 	},
 
 	Route{
+		"CreateCoach",
+		strings.ToUpper("Post"),
+		"/admin/create/coach",
+		services.CreateCoach,
+	},
+
+	Route{
+		"CreateAdmin",
+		strings.ToUpper("Post"),
+		"/admin/create/admin",
+		services.CreateAdmin,
+	},
+
+	Route{
 		"RestoreBackup",
 		strings.ToUpper("Post"),
 		"/admin/restore",

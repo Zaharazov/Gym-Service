@@ -36,7 +36,7 @@ func FetchUsers() ([]models.User, error) {
 	return users, nil
 }
 
-func AddUser(name, username, password string) error {
+func AddUser(name, username, password string, age int, sex, phone string) error {
 
 	connStr := configs.DBPath
 	db, err := sql.Open("postgres", connStr)
@@ -57,8 +57,8 @@ func AddUser(name, username, password string) error {
 		return errors.New("username already exists")
 	}
 
-	query = "INSERT INTO users (name, login, password) VALUES ($1, $2, $3)"
-	_, err = db.Exec(query, name, username, password)
+	query = "INSERT INTO users (name, login, password, age, sex, phone) VALUES ($1, $2, $3, $4, $5, $6)"
+	_, err = db.Exec(query, name, username, password, age, sex, phone)
 	if err != nil {
 		return err
 	}

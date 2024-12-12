@@ -8,9 +8,9 @@ type User struct {
 	Password string
 	Active   sql.NullBool
 	Name     string
-	Age      sql.NullInt64
-	Sex      sql.NullString
-	Phone    sql.NullString
+	Age      int
+	Sex      string
+	Phone    string
 	PassID   sql.NullInt64
 	GymID    sql.NullInt64
 }

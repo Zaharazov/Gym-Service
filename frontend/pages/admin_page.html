@@ -140,6 +140,48 @@
         .backup-buttons label:hover {
             background-color: #3a7fb1;
         }
+
+        .create-section {
+        background-color: #f9f9f9;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .create-section h2 {
+            margin-bottom: 15px;
+        }
+
+        .create-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .create-section label {
+            font-weight: bold;
+        }
+
+        .create-section input,
+        .create-section textarea,
+        .create-section button {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .create-section button {
+            background-color: #5a9bd5;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .create-section button:hover {
+            background-color: #3a7fb1;
+        }
     </style>
 </head>
 <body>
@@ -358,6 +400,63 @@
         <img src="{{.GraphPath}}" alt="График демонстрирует количество пользователей, администраторов и тренеров">
     </div>
     
+    <div class="container">
+        <!-- Создание тренера -->
+    <div class="create-section">
+        <h2>Создание нового тренера</h2>
+        <form method="POST" action="/admin/create/coach">
+            <label for="coach-login">Логин:</label>
+            <input type="text" id="coach-login" name="login" required>
+
+            <label for="coach-password">Пароль:</label>
+            <input type="password" id="coach-password" name="password" required>
+
+            <label for="coach-name">Имя:</label>
+            <input type="text" id="coach-name" name="name" required>
+
+            <label for="coach-age">Возраст:</label>
+            <input type="number" id="coach-age" name="age" required>
+
+            <label for="coach-sex">Пол:</label>
+            <input type="text" id="coach-sex" name="sex" required>
+
+            <label for="coach-description">Описание:</label>
+            <textarea id="coach-description" name="description"></textarea>
+
+            <label for="coach-gym-id">ID зала:</label>
+            <input type="number" id="coach-gym-id" name="gym_id">
+
+            <button type="submit">Создать тренера</button>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <!-- Создание администратора -->
+    <div class="create-section">
+        <h2>Создание нового администратора</h2>
+        <form method="POST" action="/admin/create/admin">
+            <label for="admin-login">Логин:</label>
+            <input type="text" id="admin-login" name="login" required>
+
+            <label for="admin-password">Пароль:</label>
+            <input type="password" id="admin-password" name="password" required>
+
+            <label for="admin-name">Имя:</label>
+            <input type="text" id="admin-name" name="name" required>
+
+            <label for="admin-access-level">Уровень доступа:</label>
+            <input type="number" id="admin-access-level" name="access_level" required>
+
+            <label for="admin-phone">Телефон:</label>
+            <input type="text" id="admin-phone" name="phone" required>
+
+            <label for="admin-gym-id">ID зала:</label>
+            <input type="number" id="admin-gym-id" name="gym_id">
+
+            <button type="submit">Создать администратора</button>
+        </form>
+    </div>
+</div>
 
 </body>
 </html>

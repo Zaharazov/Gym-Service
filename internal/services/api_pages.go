@@ -238,6 +238,7 @@ func GetEventsPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user_role := session.Values["role"].(string)
+	fmt.Println(user_role)
 
 	if user_role != "coach" && user_role != "admin" {
 		http.ServeFile(w, r, "./frontend/pages/not_auth_page.html")

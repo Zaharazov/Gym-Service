@@ -7,8 +7,8 @@ type Coach struct {
 	Login       string
 	Password    string
 	Name        string
-	Age         sql.NullInt64
-	Sex         sql.NullString
-	Description sql.NullString
+	Age         int
+	Sex         string
+	Description string
 	GymID       sql.NullInt64
 }

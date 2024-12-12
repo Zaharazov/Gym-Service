@@ -7,7 +7,7 @@ type Admin struct {
 	Login       string
 	Password    string
 	Name        string
-	AccessLevel sql.NullInt64
-	Phone       sql.NullString
+	AccessLevel int
+	Phone       string
 	GymID       sql.NullInt64
 }

@@ -83,3 +83,33 @@ func CountCoaches() (int, error) {
 
 	return count, nil
 }
+
+func AddCoach(login, password, name string, age int, sex string, description string, gymID sql.NullInt64) error {
+	// Подключение к базе данных
+	connStr := configs.DBPath
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// Запрос для вставки данных тренера
+	query := `INSERT INTO coaches (login, password, name, age, sex, description, gym_id) VALUES ($1, $2, $3, $4, $5, $6, $7)`
+
+	// Выполнение запроса с параметрами
+	_, err = db.Exec(query,
+		login,
+		password,
+		name,
+		age,
+		sex,
+		description,
+		gymID,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -84,3 +84,25 @@ func CountAdmins() (int, error) {
 
 	return count, nil
 }
+
+func AddAdmin(login, password, name string, accessLevel int, phone string, gymID sql.NullInt64) error {
+	// Подключение к базе данных
+	connStr := configs.DBPath
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// Запрос для вставки данных администратора
+	query := `INSERT INTO admins (login, password, name, access_level, phone, gym_id) VALUES ($1, $2, $3, $4, $5, $6)`
+
+	// Выполнение запроса с параметрами
+	_, err = db.Exec(query, login, password, name, accessLevel, phone, gymID)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
