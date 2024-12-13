@@ -53,6 +53,8 @@ INSERT INTO admins (login, password, name, phone, gym_id) VALUES
 ('admin5', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Администратор Пятый', '123-456-7894', 5),
 ('admin6', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Администратор Шестой', '123-456-7895', 6);
 
+SELECT pg_catalog.setval(pg_get_serial_sequence('admins', 'admin_id'), max(admin_id)) FROM admins;
+
 INSERT INTO users (login, password, name, age, sex, phone, pass_id, gym_id) VALUES
 ('user1', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Пользователь Первый', 25, 'М', '123-456-7896', 1, 1),
 ('user2', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Пользователь Второй', 30, 'Ж', '123-456-7897', 2, 2),
@@ -60,6 +62,8 @@ INSERT INTO users (login, password, name, age, sex, phone, pass_id, gym_id) VALU
 ('user4', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Пользователь Четвертая', 35, 'Ж', '123-456-7899', 4, 4),
 ('user5', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Пользователь Пятый', 40, 'М', '123-456-7890', 5, 5),
 ('user6', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Пользователь Шестая', 22, 'Ж', '123-456-7891', 6, 6);
+
+SELECT pg_catalog.setval(pg_get_serial_sequence('users', 'user_id'), max(user_id)) FROM users;
 
 INSERT INTO coaches (login, password, name, age, sex, description, gym_id) VALUES
 ('coach1', '$2a$10$zkRxfq6A4439C3sKG2VEAOJimZK8h/mqUScxPHDdDO.d33aBjUGdm', 'Тренер Первый', 35, 'М', 'Специалист по силовым тренировкам', 1),
@@ -90,6 +94,8 @@ INSERT INTO events (event_id, name, description, coach_id) VALUES
 (10, 'Круговая тренировка', 'Тренировка всего тела с несколькими станциями', 10),
 (11, 'Основы велоспорта', 'Тренировка для начинающих велосипедистов', 11),
 (12, 'Продвинутые силовые тренировки', 'Программа силовых тренировок для опытных спортсменов', 12);
+
+SELECT pg_catalog.setval(pg_get_serial_sequence('events', 'event_id'), max(event_id)) FROM events;
 
 INSERT INTO current_events (gym_id, event_id, time, data) VALUES
 (1, 1, '09:00:00', '2024-12-15'), (1, 2, '10:30:00', '2024-12-15'),
