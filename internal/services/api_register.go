@@ -3,6 +3,7 @@ package services
 import (
 	"Gym-Service/internal/database"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -33,11 +34,23 @@ func RegUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := store.Get(r, "session-name")
+	session, err := Store.Get(r, "session-name")
+	if err != nil {
+		log.Printf("Ошибка при получении сессии: %v", err) // лог в консоль
+		http.Error(w, "Ошибка создания сессии", http.StatusInternalServerError)
+		return
+	}
+
 	session.Values["authenticated"] = true
 	session.Values["username"] = username
 	session.Values["role"] = "user"
-	session.Save(r, w)
+
+	err = session.Save(r, w)
+	if err != nil {
+		log.Printf("Ошибка при сохранении сессии: %v", err) // лог в консоль
+		http.Error(w, "Ошибка сохранения сессии", http.StatusInternalServerError)
+		return
+	}
 
 	http.Redirect(w, r, "/gyms", http.StatusFound)
 }

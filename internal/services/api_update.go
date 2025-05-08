@@ -10,7 +10,7 @@ import (
 
 func SetPass(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
@@ -42,7 +42,7 @@ func SetPass(w http.ResponseWriter, r *http.Request) {
 
 func SetGym(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {

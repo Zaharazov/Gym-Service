@@ -8,11 +8,13 @@ import (
 )
 
 var (
-	Port     = GetConfigs("httpPort")
-	DBPath   = GetConfigs("dbPath")
-	DBName   = GetConfigs("dbName")
-	Username = GetConfigs("username")
-	Password = GetConfigs("password")
+	Port           = GetConfigs("httpPort")
+	DBPath         = GetConfigs("dbPath")
+	DBName         = GetConfigs("dbName")
+	Username       = GetConfigs("username")
+	Password       = GetConfigs("password")
+	REDIS_PASSWORD = GetConfigs("REDIS_PASSWORD")
+	SESSION_KEY    = GetConfigs("SESSION_KEY")
 )
 
 func GetConfigs(param string) string {

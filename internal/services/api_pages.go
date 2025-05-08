@@ -22,7 +22,7 @@ func loadHTMLFile(filePath string) string {
 
 func GetAuthPage(w http.ResponseWriter, r *http.Request) {
 
-	session, err := store.Get(r, "session-name")
+	session, err := Store.Get(r, "session-name")
 	if err == nil {
 		if auth, ok := session.Values["authenticated"].(bool); auth && ok {
 			http.Redirect(w, r, "/gyms", http.StatusFound)
@@ -56,7 +56,7 @@ func GetAuthPage(w http.ResponseWriter, r *http.Request) {
 
 func GetGymsPage(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
@@ -94,7 +94,7 @@ func GetGymsPage(w http.ResponseWriter, r *http.Request) {
 
 func GetGymPageById(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
@@ -170,7 +170,7 @@ func GetGymPageById(w http.ResponseWriter, r *http.Request) {
 
 func GetGymsPassesPage(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
@@ -208,7 +208,7 @@ func GetGymsPassesPage(w http.ResponseWriter, r *http.Request) {
 
 func GetEquipmentPage(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
@@ -246,7 +246,7 @@ func GetEquipmentPage(w http.ResponseWriter, r *http.Request) {
 
 func GetEventsPage(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
@@ -289,7 +289,7 @@ func GetEventsPage(w http.ResponseWriter, r *http.Request) {
 
 func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {
@@ -465,7 +465,7 @@ func GetAdminPage(w http.ResponseWriter, r *http.Request) {
 
 func NotFoundPage(w http.ResponseWriter, r *http.Request) {
 
-	session, _ := store.Get(r, "session-name")
+	session, _ := Store.Get(r, "session-name")
 	auth, ok := session.Values["authenticated"].(bool)
 
 	if !ok || !auth {

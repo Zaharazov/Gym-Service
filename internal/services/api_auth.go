@@ -9,7 +9,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var store = sessions.NewCookieStore([]byte("super-secret-key"))
+var Store sessions.Store // глобальный store, который будет установлен из main.go
+
+func SetSessionStore(s sessions.Store) {
+	Store = s
+}
 
 func authenticate(username, password string) (string, bool) {
 	// Проверяем в таблице пользователей
@@ -65,34 +69,49 @@ func GetSession(w http.ResponseWriter, r *http.Request) {
 
 	// Аутентифицируем пользователя
 	role, authenticated := authenticate(username, password)
+
+	session, err := Store.Get(r, "session-name")
+	if err != nil {
+		log.Printf("Ошибка при получении сессии: %v", err) // лог в консоль
+		http.Error(w, "Ошибка получения сессии", http.StatusInternalServerError)
+		return
+	}
+
 	if !authenticated {
-
-		// Сохраняем ошибку в сессии
-		session, _ := store.Get(r, "session-name")
 		session.Values["error"] = "Неверный логин или пароль"
-		session.Values["username"] = username // Сохраняем введенное имя пользователя
-		session.Save(r, w)
-
+		session.Values["username"] = username
+		if err := session.Save(r, w); err != nil {
+			log.Printf("Ошибка сохранения сессии: %v", err)
+		}
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	// Успешный вход, сохраняем данные в сессию
-	session, _ := store.Get(r, "session-name")
 	session.Values["authenticated"] = true
 	session.Values["username"] = username
 	session.Values["role"] = role
-	session.Save(r, w)
+	if err := session.Save(r, w); err != nil {
+		log.Printf("Ошибка сохранения сессии: %v", err)
+	}
 
 	http.Redirect(w, r, "/gyms", http.StatusFound)
 }
 
 func EndSession(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session-name")
+
+	session, err := Store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, "Ошибка завершения сессии", http.StatusInternalServerError)
+		return
+	}
+
 	session.Values["authenticated"] = false
 	session.Values["username"] = nil
 	session.Values["role"] = nil
-	session.Save(r, w)
+
+	if err := session.Save(r, w); err != nil {
+		log.Printf("Ошибка сохранения сессии: %v", err)
+	}
 
 	http.Redirect(w, r, "/", http.StatusFound)
 }

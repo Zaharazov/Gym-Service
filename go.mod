@@ -12,6 +12,11 @@ require (
 )
 
 require (
+	github.com/boj/redistore v1.4.1 // indirect
+	github.com/gomodule/redigo v1.9.2 // indirect
+)
+
+require (
 	git.sr.ht/~sbinet/gg v0.6.0 // indirect
 	github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b // indirect
 	github.com/campoy/embedmd v1.0.0 // indirect
