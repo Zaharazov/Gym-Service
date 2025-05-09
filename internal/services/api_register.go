@@ -2,6 +2,7 @@ package services
 
 import (
 	"Gym-Service/internal/database"
+	"Gym-Service/internal/server/logger"
 	"fmt"
 	"log"
 	"net/http"
@@ -36,6 +37,7 @@ func RegUser(w http.ResponseWriter, r *http.Request) {
 
 	session, err := Store.Get(r, "session-name")
 	if err != nil {
+		logger.PublishLog("ERROR", fmt.Sprintf("Failed to register user: %v", err), "auth")
 		log.Printf("Ошибка при получении сессии: %v", err) // лог в консоль
 		http.Error(w, "Ошибка создания сессии", http.StatusInternalServerError)
 		return
@@ -51,6 +53,8 @@ func RegUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Ошибка сохранения сессии", http.StatusInternalServerError)
 		return
 	}
+
+	logger.PublishLog("INFO", fmt.Sprintf("User registered: %s", username), "auth")
 
 	http.Redirect(w, r, "/gyms", http.StatusFound)
 }

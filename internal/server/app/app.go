@@ -4,6 +4,7 @@ import (
 	"Gym-Service/internal/database"
 	"Gym-Service/internal/presentation/routers"
 	"Gym-Service/internal/server/configs"
+	"Gym-Service/internal/server/logger"
 	"Gym-Service/internal/server/notifications"
 	"Gym-Service/internal/services"
 	"database/sql"
@@ -12,11 +13,18 @@ import (
 	"time"
 
 	"github.com/boj/redistore"
+	"github.com/redis/go-redis/v9"
 )
 
 var store *redistore.RediStore
 
 func Run() {
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
+	logger.InitLogger(rdb)
+	logger.StartLogSubscriber()
 
 	var err error
 	// 10 — max active connections; "tcp" and "localhost:6379" — адрес Redis
